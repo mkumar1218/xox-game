@@ -1,5 +1,4 @@
 
-            font-weight: b<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -116,6 +115,55 @@
 
         createBoard();
     </script>
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>XOX Game</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Player Name Inputs -->
+    <div class="player-inputs">
+        <label for="playerX">Player X Name:</label>
+        <input type="text" id="playerX" placeholder="Enter Player X's Name">
+        <label for="playerO">Player O Name:</label>
+        <input type="text" id="playerO" placeholder="Enter Player O's Name">
+        <button id="startGame">Start Game</button>
+    </div>
+    
+    <!-- Game Title -->
+    <h1>XOX Game</h1>
+    
+    <!-- Game Board -->
+    <div class="game-board">
+        <div class="row">
+            <button class="cell"></button>
+            <button class="cell"></button>
+            <button class="cell"></button>
+        </div>
+        <div class="row">
+            <button class="cell"></button>
+            <button class="cell"></button>
+            <button class="cell"></button>
+        </div>
+        <div class="row">
+            <button class="cell"></button>
+            <button class="cell"></button>
+            <button class="cell"></button>
+        </div>
+    </div>
+    
+    <!-- Winner Display -->
+    <p id="winnerMessage"></p>
+    
+    <!-- Restart Button -->
+    <button id="restartGame">Restart Game</button>
+    
+    <script src="script.js"></script>
 </body>
 </html>
 
