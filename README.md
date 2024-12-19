@@ -16,14 +16,6 @@
             flex-direction: column;
         }
         
-        .player-inputs {
-            margin-bottom: 20px;
-        }
-
-        .player-inputs label, .player-inputs input {
-            margin-right: 10px;
-        }
-
         .game-container {
             display: grid;
             grid-template-columns: repeat(3, 100px);
@@ -52,47 +44,42 @@
             font-size: 1.5rem;
         }
 
-        button {
-            margin-top: 10px;
-            padding: 10px 20px;
-            font-size: 1rem;
+        .celebration {
+            display: none; /* Hidden by default, displayed after win */
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .celebration img {
+            max-width: 100%;
+            height: auto;
+        }
+
+        .celebration h2 {
+            font-size: 2rem;
+            color: #ff5722;
         }
     </style>
 </head>
 <body>
-    <!-- Player Name Inputs -->
-    <div class="player-inputs">
-        <label for="playerX">Player X Name:</label>
-        <input type="text" id="playerX" placeholder="Enter Player X's Name">
-        <label for="playerO">Player O Name:</label>
-        <input type="text" id="playerO" placeholder="Enter Player O's Name">
-        <button id="startGame">Start Game</button>
-    </div>
-
     <h1>XOX Game</h1>
-
     <div class="game-container" id="game-container"></div>
     <div class="status" id="status"></div>
     <button onclick="resetGame()">Restart Game</button>
 
+    <!-- Celebration Section -->
+    <div class="celebration" id="celebration">
+        <h2>Congratulations, <span id="winner-name">Player X</span> Wins!</h2>
+        <img src="game-celebration.png" alt="Winner Celebration Image">
+    </div>
+
     <script>
         const gameContainer = document.getElementById('game-container');
         const statusText = document.getElementById('status');
-        const startGameButton = document.getElementById('startGame');
-        const playerXInput = document.getElementById('playerX');
-        const playerOInput = document.getElementById('playerO');
-        
+        const celebrationDiv = document.getElementById('celebration');
+        const winnerNameText = document.getElementById('winner-name');
         let currentPlayer = 'X';
         let board = ['', '', '', '', '', '', '', '', ''];
-        let playerXName = 'Player X';
-        let playerOName = 'Player O';
-
-        startGameButton.addEventListener('click', () => {
-            playerXName = playerXInput.value || 'Player X';
-            playerOName = playerOInput.value || 'Player O';
-            statusText.textContent = `${playerXName}'s Turn (X)`;
-            createBoard();
-        });
 
         function createBoard() {
             gameContainer.innerHTML = '';
@@ -115,15 +102,13 @@
             e.target.classList.add('taken');
 
             if (checkWin()) {
-                const winner = currentPlayer === 'X' ? playerXName : playerOName;
-                statusText.textContent = `${winner} Wins! 🎉`;
-                endGame();
+                statusText.textContent = `Player ${currentPlayer} Wins!`;
+                endGame(currentPlayer);
             } else if (board.every(cell => cell !== '')) {
                 statusText.textContent = 'Draw!';
             } else {
                 currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
-                const currentPlayerName = currentPlayer === 'X' ? playerXName : playerOName;
-                statusText.textContent = `${currentPlayerName}'s Turn (${currentPlayer})`;
+                statusText.textContent = `Player ${currentPlayer}'s Turn`;
             }
         }
 
@@ -140,17 +125,18 @@
             });
         }
 
-        function endGame() {
+        function endGame(winner) {
             document.querySelectorAll('.cell').forEach(cell => cell.classList.add('taken'));
+            celebrationDiv.style.display = 'block'; // Show the celebration image and message
+            winnerNameText.textContent = `Player ${winner}`; // Display the winner's name
         }
 
         function resetGame() {
             board = ['', '', '', '', '', '', '', '', ''];
             currentPlayer = 'X';
-            playerXName = playerXInput.value || 'Player X';
-            playerOName = playerOInput.value || 'Player O';
-            statusText.textContent = `${playerXName}'s Turn (X)`;
+            statusText.textContent = `Player ${currentPlayer}'s Turn`;
             createBoard();
+            celebrationDiv.style.display = 'none'; // Hide celebration message on reset
         }
 
         createBoard();
