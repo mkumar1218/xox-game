@@ -1,4 +1,4 @@
-
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -13,8 +13,17 @@
             height: 100vh;
             margin: 0;
             background-color: #f4f4f9;
+            flex-direction: column;
         }
         
+        .player-inputs {
+            margin-bottom: 20px;
+        }
+
+        .player-inputs label, .player-inputs input {
+            margin-right: 10px;
+        }
+
         .game-container {
             display: grid;
             grid-template-columns: repeat(3, 100px);
@@ -24,12 +33,12 @@
         
         .cell {
             width: 100px;
-            align-items: center;
             height: 100px;
             background-color: #ffffff;
             display: flex;
             justify-content: center;
-            font-size: 2rem;old;
+            align-items: center;
+            font-size: 2rem;
             cursor: pointer;
             border: 2px solid #333;
         }
@@ -42,21 +51,48 @@
             margin-top: 20px;
             font-size: 1.5rem;
         }
+
+        button {
+            margin-top: 10px;
+            padding: 10px 20px;
+            font-size: 1rem;
+        }
     </style>
 </head>
 <body>
-    <div>
-        <h1>XOX Game</h1>
-        <div class="game-container" id="game-container"></div>
-        <div class="status" id="status"></div>
-        <button onclick="resetGame()">Restart Game</button>
+    <!-- Player Name Inputs -->
+    <div class="player-inputs">
+        <label for="playerX">Player X Name:</label>
+        <input type="text" id="playerX" placeholder="Enter Player X's Name">
+        <label for="playerO">Player O Name:</label>
+        <input type="text" id="playerO" placeholder="Enter Player O's Name">
+        <button id="startGame">Start Game</button>
     </div>
+
+    <h1>XOX Game</h1>
+
+    <div class="game-container" id="game-container"></div>
+    <div class="status" id="status"></div>
+    <button onclick="resetGame()">Restart Game</button>
 
     <script>
         const gameContainer = document.getElementById('game-container');
         const statusText = document.getElementById('status');
+        const startGameButton = document.getElementById('startGame');
+        const playerXInput = document.getElementById('playerX');
+        const playerOInput = document.getElementById('playerO');
+        
         let currentPlayer = 'X';
         let board = ['', '', '', '', '', '', '', '', ''];
+        let playerXName = 'Player X';
+        let playerOName = 'Player O';
+
+        startGameButton.addEventListener('click', () => {
+            playerXName = playerXInput.value || 'Player X';
+            playerOName = playerOInput.value || 'Player O';
+            statusText.textContent = `${playerXName}'s Turn (X)`;
+            createBoard();
+        });
 
         function createBoard() {
             gameContainer.innerHTML = '';
@@ -79,13 +115,15 @@
             e.target.classList.add('taken');
 
             if (checkWin()) {
-                statusText.textContent = `Player ${currentPlayer} Wins!`;
+                const winner = currentPlayer === 'X' ? playerXName : playerOName;
+                statusText.textContent = `${winner} Wins! 🎉`;
                 endGame();
             } else if (board.every(cell => cell !== '')) {
                 statusText.textContent = 'Draw!';
             } else {
                 currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
-                statusText.textContent = `Player ${currentPlayer}'s Turn`;
+                const currentPlayerName = currentPlayer === 'X' ? playerXName : playerOName;
+                statusText.textContent = `${currentPlayerName}'s Turn (${currentPlayer})`;
             }
         }
 
@@ -109,7 +147,9 @@
         function resetGame() {
             board = ['', '', '', '', '', '', '', '', ''];
             currentPlayer = 'X';
-            statusText.textContent = `Player ${currentPlayer}'s Turn`;
+            playerXName = playerXInput.value || 'Player X';
+            playerOName = playerOInput.value || 'Player O';
+            statusText.textContent = `${playerXName}'s Turn (X)`;
             createBoard();
         }
 
@@ -117,53 +157,5 @@
     </script>
 </body>
 </html>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>XOX Game</title>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
-    <!-- Player Name Inputs -->
-    <div class="player-inputs">
-        <label for="playerX">Player X Name:</label>
-        <input type="text" id="playerX" placeholder="Enter Player X's Name">
-        <label for="playerO">Player O Name:</label>
-        <input type="text" id="playerO" placeholder="Enter Player O's Name">
-        <button id="startGame">Start Game</button>
-    </div>
-    
-    <!-- Game Title -->
-    <h1>XOX Game</h1>
-    
-    <!-- Game Board -->
-    <div class="game-board">
-        <div class="row">
-            <button class="cell"></button>
-            <button class="cell"></button>
-            <button class="cell"></button>
-        </div>
-        <div class="row">
-            <button class="cell"></button>
-            <button class="cell"></button>
-            <button class="cell"></button>
-        </div>
-        <div class="row">
-            <button class="cell"></button>
-            <button class="cell"></button>
-            <button class="cell"></button>
-        </div>
-    </div>
-    
-    <!-- Winner Display -->
-    <p id="winnerMessage"></p>
-    
-    <!-- Restart Button -->
-    <button id="restartGame">Restart Game</button>
-    
-    <script src="script.js"></script>
-</body>
-</html>
+
 
